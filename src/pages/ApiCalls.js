@@ -1,7 +1,8 @@
 import apiFacade from "../api/apiFacade";
+import facade from "../api/quoteFacade";
 import React, { useState, useEffect } from "react";
 
-export default function Jokes({isLoggedIn}) {
+export default function Jokes({ isLoggedIn }) {
   const [dataFromServer, setDataFromServer] = useState("Waiting...");
   const [dataFromServer1, setDataFromServer1] = useState("Waiting...");
 
@@ -14,6 +15,11 @@ export default function Jokes({isLoggedIn}) {
     apiFacade.getQuote().then((data) => setDataFromServer1(data));
   };
 
+  const addQuote = (e) => {
+    e.preventDefault();
+    facade.addQuote(e.target.value);
+  };
+
   return (
     <div className="container-fluid padding">
       <div className="row">
@@ -24,16 +30,27 @@ export default function Jokes({isLoggedIn}) {
           <p className="text-center">{dataFromServer.dadValue}</p>
           <p className="text-center">{dataFromServer.insult}</p>
           <h2 className="text-center mt-5 mb-2">Api Calls(On Click)</h2>
-          <button type="submit" className="btn btn-primary" onClick={handleClick}>Load quotes</button>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            onClick={handleClick}
+          >
+            Load quotes
+          </button>
           <p className="text-center mt-2">{dataFromServer1.friendsChar}</p>
-          <p className="text-center">{dataFromServer1.friendsQuote}</p>
+          <p className="text-center" value={dataFromServer1.friendsQuote}>
+            {dataFromServer1.friendsQuote}
+          </p>
+          <button type="submit" onClick={addQuote}>
+            Save quote
+          </button>
           {isLoggedIn && (
             <div className="mt-5">
               <p>*******************</p>
               <h4>Only visable if logged in</h4>
               <p>Add custom features for users</p>
               <p>*******************</p>
-              </div>
+            </div>
           )}
           <div className="col-3"></div>
         </div>

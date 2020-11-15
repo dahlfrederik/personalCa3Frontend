@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import ApiCalls from "./pages/ApiCalls";
 import NoMatch from "./components/NoMatch";
 import SecurePage from "./pages/SecurePage";
+import QuotePage from "./pages/QuotePage";
 import facade from "./api/userFacade";
 import { LogIn, LoggedIn } from "./pages/Login";
 import jwt_decode from "jwt-decode";
@@ -42,7 +43,23 @@ function App() {
       <Route
         {...rest}
         render={() => {
-          return loggedIn === true && user.roles === "admin,user" ? (
+          return (loggedIn === true && user.roles === "user") ||
+            (loggedIn === true && user.roles === "admin") ? (
+            children
+          ) : (
+            <Redirect to="/login-out" />
+          );
+        }}
+      />
+    );
+  }
+
+  function PrivateRouteForUser({ children, ...rest }) {
+    return (
+      <Route
+        {...rest}
+        render={() => {
+          return loggedIn === true && user.roles === "user" ? (
             children
           ) : (
             <Redirect to="/login-out" />
@@ -70,6 +87,9 @@ function App() {
           <PrivateRoute path="/secure-page">
             <SecurePage />
           </PrivateRoute>
+          <PrivateRouteForUser path="/quote-page">
+            <QuotePage />
+          </PrivateRouteForUser>
           <Route path="/login-out">
             {!loggedIn ? (
               <LogIn login={login} />
