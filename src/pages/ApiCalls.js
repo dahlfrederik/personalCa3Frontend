@@ -6,6 +6,9 @@ export default function Jokes({ isLoggedIn }) {
   const [dataFromServer, setDataFromServer] = useState("Waiting...");
   const [dataFromServer1, setDataFromServer1] = useState("Waiting...");
 
+  const savedInit = { quote: "" };
+  const [savedQuote, setSavedQuote] = useState(savedInit);
+
   useEffect(() => {
     apiFacade.getJokes().then((data) => setDataFromServer(data));
   }, []);
@@ -17,7 +20,10 @@ export default function Jokes({ isLoggedIn }) {
 
   const addQuote = (e) => {
     e.preventDefault();
-    facade.addQuote(e.target.value);
+    let specificQuote = e.target.value;
+    setSavedQuote(specificQuote);
+    console.log(savedQuote);
+    facade.addQuote(specificQuote);
   };
 
   return (
@@ -38,12 +44,20 @@ export default function Jokes({ isLoggedIn }) {
             Load quotes
           </button>
           <p className="text-center mt-2">{dataFromServer1.friendsChar}</p>
-          <p className="text-center" value={dataFromServer1.friendsQuote}>
+          {/* this is a new version of addQuote  */}
+          <p className="text-center">
             {dataFromServer1.friendsQuote}
+            <button
+              id="1"
+              value={dataFromServer1.friendsQuote}
+              type="submit"
+              className="btn btn-primary btn-sm ml-2"
+              onClick={addQuote}
+            >
+              Save joke
+            </button>
           </p>
-          <button type="submit" onClick={addQuote}>
-            Save quote
-          </button>
+
           {isLoggedIn && (
             <div className="mt-5">
               <p>*******************</p>

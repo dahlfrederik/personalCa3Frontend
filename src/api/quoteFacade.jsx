@@ -2,7 +2,7 @@ import SERVER_URL from "../util/Settings";
 
 function quoteFacade(){
     function addQuote (quote){
-        const options = makeOptions("POST", true, {
+        const options = makeOptions("POST", {
           quote: quote
         });
         return fetch(SERVER_URL+ "/api/quotes/users" ,options)
